@@ -8,7 +8,7 @@ int main(void)
 {
 	char str[50];
 	char *token;
-	char *del = "_ \n";
+	char *del = " ";
 	int fd1 = open("Hello", O_RDONLY);
 	ssize_t n = read(fd1, str, 50);
 	if (n == -1)

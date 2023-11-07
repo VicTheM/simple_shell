@@ -11,8 +11,9 @@ int main(void)
 	char *line;
 	size_t n = 0;
 	unsigned int i = 0;
+	char prompt[] = "$: ";
 
-	write(STDOUT_FILENO, "$ ", 2);
+	write(STDOUT_FILENO, prompt, 3);
 	nread = _getline(&line, &n, STDIN_FILENO);
 	if (nread == -1)
 		exit(98);

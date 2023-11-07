@@ -17,7 +17,10 @@ int main(void)
 	write(STDOUT_FILENO, "$ ", 2);
 	nread = getline(&line, &n, input);
 	if (nread == -1)
+	{
+		write(1, "\n", 1);
 		exit(98);
+	}
 
 	while (line[i] != '\n')
 	{
