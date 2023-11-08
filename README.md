@@ -1,5 +1,12 @@
+# Compilation
+1)	compile like this:
+	gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o yourShell
+2) 'yourShell' is any name you wish
+
+
 # General
 1)	functions that creates malloced string starts with m_*
+
 
 # The Parser
 Sources in this folder contain code that
