@@ -9,8 +9,7 @@ void _execve(const char *pn, char *const argv[], char *const envp[]);
 int main(void)
 {
 	pid_t p;
-	char exe[] = "/bin/ls";
-	char *const argv[] = {"ls", "-l", "/tmp", NULL};
+	char *const argv[] = {"../ls", "-l", NULL};
 	char *const envp[] = {NULL};
 	int k = 0;
 
@@ -27,7 +26,7 @@ int main(void)
 		{
 			/* child process */
 			printf("\n\tchild: %ld\tparent: %ld\n", (long)getpid(), (long)getppid());
-			_execve(exe, argv,  envp);
+			_execve(argv[0], argv,  envp);
 			printf("\nwill this line execute?\n");
 		}
 		else

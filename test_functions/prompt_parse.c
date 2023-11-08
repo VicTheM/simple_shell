@@ -1,8 +1,8 @@
 #include "main.h"
 ssize_t _read(char *buf, int fd, size_t *n);
-ssize_t _getline0(char **line, size_t *n, int fd);
+ssize_t _getline(char **line, size_t *n, int fd);
 
-char *m_parse1(void)
+char *m_parse(void)
 {
 	ssize_t nread;
 	char *line;
@@ -10,7 +10,7 @@ char *m_parse1(void)
 	char prompt[] = "$: ";
 
 	write(STDOUT_FILENO, prompt, 3);
-	nread = _getline0(&line, &n, STDIN_FILENO);
+	nread = _getline(&line, &n, STDIN_FILENO);
 	if (nread < 1)
 	{
 		return (NULL);
@@ -20,7 +20,7 @@ char *m_parse1(void)
 }
 
 
-char **m_token1(char *line, char *del)
+char **m_token(char *line, char *del)
 {
 	char *token;
 	int c = 0;
@@ -33,24 +33,24 @@ char **m_token1(char *line, char *del)
 		token = strtok(NULL, del);
 		commands[++c] = token;
 	}
-	
+	printf("---------------------------------------\n");
 	return (commands);
 }
 
-char **m_input2(void)
+char **m_input(void)
 {
 	char del[] = " \n";
-	char *line = m_parse1();
+	char *line = m_parse();
 	if (line == NULL)
 	{
 		write(1, "\n", 1);
 		return (NULL);
 	}
 
-	return (m_token1(line, del));
+	return (m_token(line, del));
 }
 
-ssize_t _getline0(char **line, size_t *n, int fd)
+ssize_t _getline(char **line, size_t *n, int fd)
 {
 	ssize_t c = 0;
 	char *buf = malloc(1024 * sizeof(char));
@@ -70,7 +70,7 @@ ssize_t _getline0(char **line, size_t *n, int fd)
 	free(buf);
 	return (c);
 }
-
+/*
 int main(void)
 {
 	int c, i;
@@ -88,6 +88,7 @@ int main(void)
 	free(commands);
 	return (0);
 }
+*/
 
 ssize_t _read(char *buf, int fd, size_t *n)
 {
