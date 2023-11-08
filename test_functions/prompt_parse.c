@@ -1,4 +1,4 @@
-#include "main.h"
+ #include "main.h"
 ssize_t _read(char *buf, int fd, size_t *n);
 ssize_t _getline(char **line, size_t *n, int fd);
 
@@ -15,8 +15,7 @@ char *m_parse(void)
 	{
 		return (NULL);
 	}
-
-	return (line);
+	return (line + 5);
 }
 
 
@@ -33,7 +32,6 @@ char **m_token(char *line, char *del)
 		token = strtok(NULL, del);
 		commands[++c] = token;
 	}
-	printf("---------------------------------------\n");
 	return (commands);
 }
 
@@ -46,7 +44,11 @@ char **m_input(void)
 		write(1, "\n", 1);
 		return (NULL);
 	}
-
+	while (*line == '\n')
+	{
+		free(line - 5);
+		line = m_parse();
+	}
 	return (m_token(line, del));
 }
 
@@ -54,6 +56,8 @@ ssize_t _getline(char **line, size_t *n, int fd)
 {
 	ssize_t c = 0;
 	char *buf = malloc(1024 * sizeof(char));
+	if (buf == NULL)
+		return (0);
 
 	*n = _read(buf, fd, n);
 	if (*n == 0)
@@ -61,14 +65,24 @@ ssize_t _getline(char **line, size_t *n, int fd)
 		free(buf);
 		return (0);
 	}
-	*line = malloc(sizeof(char) * (*n));
+	*line = malloc(sizeof(char) * ((*n) + 5));
+	if (*line == NULL)
+	{
+		free(buf);
+		return (0);
+	}
+	line[0][0] = '/';
+	line[0][1] = 'b';
+	line[0][2] = 'i';
+	line[0][3] = 'n';
+	line[0][4] = '/';
 	for (c = 0; buf[c] != '\n'; c++)
 	{
-		line[0][c] = buf[c];
+		line[0][c + 5] = buf[c];
 	}
-	line[0][c] = buf[c];
+	line[0][c + 5] = buf[c];
 	free(buf);
-	return (c);
+	return (c + 1);
 }
 /*
 int main(void)

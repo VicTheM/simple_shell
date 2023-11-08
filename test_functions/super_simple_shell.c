@@ -1,38 +1,34 @@
 #include "main.h"
-void screen(char *str, char *path);
+/* void screen(char *str, char *path); */
 
 int main(void)
 {
-	char path[1024];
 	char **argv;
 	char *envp[] = {NULL};
-
+/* How can I make the code not to exit when ctrl-c is pressed? */
 	while (1)
 	{
 		/* DISPLAY PROMPT AND PARSE */
 		argv = m_input();
 		if (argv == NULL)
-			return (-1);
-		screen(argv[0], path);
+		{
+			return (0);
+		}
 
 	/* SEARCH FOR CMD AND EXECUTE REPEAT TILL argv[n] == NULL*/
-		if (path[0] == '\0')
-		{
-			_execve(argv[0], argv, envp);
-		}
+		if (argv[0][0] != '~' && argv[0][0] != '/' && argv[0][0] != '.')
+			_execve(argv[0] - 5, argv, envp);
 		else
-		{
-			_execve(path, argv, envp);
-		}
+			_execve(argv[0], argv, envp);
 
 		/* CLEAN UP */
-		free(argv[0]);
+		free(argv[0] - 5);
 		free(argv);
 		printf("\tNew screen\n");
 	}
 	return (0);
 }
-
+/*
 void screen(char *str, char *path)
 {
 	if (str[0] != '~' && str[0] != '/' && str[0] != '.')
@@ -50,3 +46,4 @@ void screen(char *str, char *path)
 		path[0] = '\0';
 	}
 }
+*/
