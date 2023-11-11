@@ -37,12 +37,12 @@ char **m_token(char *line, char *del)
 	int c = 0;
 	char **commands = malloc(20 * sizeof(char *));
 
-	token = strtok(line, del);
+	token = _strtok(line, del);
 	commands[0] = token;
 
 	while (token != NULL)
 	{
-		token = strtok(NULL, del);
+		token = _strtok(NULL, del);
 		commands[++c] = token;
 	}
 

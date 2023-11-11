@@ -15,6 +15,9 @@ ssize_t _getline(char **line, size_t *n, int fd);
 char *m_parse(void);
 char **m_token(char *line, char *del);
 char **m_input(void);
+char *_strtok(char *str, const char *delim);
+long int _strlen(const char *str);
+char *search(char **neww, char *str, const char *delim);
 
 void _execve(const char *pathname, char *const argv[], char *const envp[]);
 
