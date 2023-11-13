@@ -18,6 +18,7 @@ char **m_input(void);
 char *_strtok(char *str, const char *delim);
 long int _strlen(const char *str);
 char *search(char **neww, char *str, const char *delim);
+char *_strcpy(char *dest, char *src, char *trail);
 
 void _execve(const char *pathname, char *const argv[], char *const envp[]);
 

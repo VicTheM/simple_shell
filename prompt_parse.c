@@ -20,7 +20,7 @@ char *m_parse(void)
 		return (NULL);
 	}
 
-	return (line + 5);
+	return (line);
 }
 
 /**
@@ -36,8 +36,33 @@ char **m_token(char *line, char *del)
 	char *token;
 	int c = 0;
 	char **commands = malloc(20 * sizeof(char *));
+	char *line2;
 
-	token = _strtok(line, del);
+	if (commands == NULL)
+		return (NULL);
+	line2 = malloc(_strlen(line) * sizeof(char) + 6);
+	if (line2 == NULL)
+	{
+		free(commands);
+		return (NULL);
+	}
+
+	line2[0] = '/';
+	line2[1] = 'b';
+	line2[2] = 'i';
+	line2[3] = 'n';
+	line2[4] = '/';
+
+	_strcpy(line2 + 5, line, del);
+	free(line);
+
+	token = _strtok(line2 + 5, del);
+	if (token == NULL)
+	{
+		free(line2);
+		free(commands);
+		return (NULL);
+	}
 	commands[0] = token;
 
 	while (token != NULL)
@@ -67,7 +92,7 @@ char **m_input(void)
 
 	while (*line == '\n')
 	{
-		free(line - 5);
+		free(line);
 		line = m_parse();
 
 		if (line == NULL)
@@ -103,22 +128,17 @@ ssize_t _getline(char **line, size_t *n, int fd)
 		return (0);
 	}
 
-	*line = malloc(sizeof(char) * ((*n) + 5));
+	*line = malloc(sizeof(char) * ((*n) + 1));
 	if (*line == NULL)
 	{
 		free(buf);
 		return (0);
 	}
-	line[0][0] = '/';
-	line[0][1] = 'b';
-	line[0][2] = 'i';
-	line[0][3] = 'n';
-	line[0][4] = '/';
 	for (c = 0; buf[c] != '\n'; c++)
 	{
-		line[0][c + 5] = buf[c];
+		line[0][c] = buf[c];
 	}
-	line[0][c + 5] = buf[c];
+	line[0][c] = buf[c];
 	free(buf);
 
 	return (c + 1);
@@ -138,25 +158,25 @@ ssize_t _getline(char **line, size_t *n, int fd)
 ssize_t _read(char *buf, int fd, size_t *n)
 {
 	/* A LIMIT OF 1024 CHARS IS IMPOSED */
-	size_t temp = 0;
+	ssize_t temp = 0;
 	size_t again = 0;
 
 	temp = read(fd, buf, 1024);
 	*n += temp;
-	if (temp == 0 && *n > 0)
+	if ((temp == 0  || temp == -1) && *n > 0)
 	{
 		buf[*n] = '\n';
 		return (*n + 1);
 	}
 
-	if (temp == 0)
+	if (temp < 1)
 		return (*n);
 
 	if (buf[(*n) - 1] != '\n')
 	{
 		again = read(fd, &(buf[*n]), 1024);
 
-		if (again == 0)
+		if (again < 1)
 		{
 			buf[*n] = '\n';
 			return (*n + 1);

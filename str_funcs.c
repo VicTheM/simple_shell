@@ -44,26 +44,22 @@ char *_strtok(char *str, const char *delim)
  */
 char *search(char **neww, char *str, const char *delim)
 {
-	int j, c, k, i;
+	int j, k, i;
 
-	k = i = 0;
+	i = 0;
+	k = -1;
+	/* strip trailing delimeters */
 	do {
-		c = 0;
-		while (c < _strlen(delim))
+		k++;
+		for (j = 0; j < _strlen(delim); j++)
 		{
-			if (str[k] == delim[c])
-			{
-				k++;
-				c = 0;
-			}
-			else
-			{
-				c++;
-			}
+			if (str[k] == delim[j])
+				break;
 		}
-	} while (str[k] == delim[c] && str[k] != '\0');
+	} while (str[k] == delim[j] && str[k] != '\n' && str[k] != '\0');
+
 	i = k;
-	if (str[k] == '\0')
+	if (str[k] == '\n' || str[k] == '\0')
 	{
 		*neww = NULL;
 		return (NULL);
@@ -102,4 +98,42 @@ long int _strlen(const char *str)
 		len++;
 
 	return (len);
+}
+
+/**
+ * _strcpy - copies the string pointed to by src,
+ * including the terminating null byte (\0),
+ * to the buffer pointed to by dest.
+ * @dest: Where string is stored
+ * @src: string
+ * @trail: strip off this string at beginning
+ *
+ * Return: dest
+ */
+char *_strcpy(char *dest, char *src, char *trail)
+{
+	int i, j, k;
+
+	j = -1;
+	i = 0;
+
+	/* strip trailing delimeters */
+	do {
+		j++;
+		for (k = 0; k < _strlen(trail); k++)
+		{
+			if (src[j] == trail[k])
+				break;
+		}
+	} while (src[j] == trail[k] && src[j] != '\0' && src[j] != '\n');
+
+	while (!(src[j] == '\n' || src[j] == '\0'))
+	{
+		dest[i] = src[j];
+		i++;
+		j++;
+	}
+	dest[i] = '\n';
+
+	return (dest);
 }
