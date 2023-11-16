@@ -1,20 +1,23 @@
- #include "main.h"
+#include "main.h"
 
 /**
  * m_parse - display prompt and gets input as an array of chars
+ * @interactive: interactive mode
  *
  * Return: a malloced array containing all valid cmdline input
  */
-char *m_parse(void)
+char *m_parse(int interactive)
 {
 	ssize_t nread;
 	char *line;
 	size_t n = 0;
 	char prompt[] = "$: ";
 
-	write(STDOUT_FILENO, prompt, 3);
+	if (interactive == 1)
+		write(STDOUT_FILENO, prompt, 3);
 
 	nread = _getline(&line, &n, STDIN_FILENO);
+/*	(*line_no)++;*/
 	if (nread < 1)
 	{
 		return (NULL);
@@ -76,14 +79,17 @@ char **m_token(char *line, char *del)
 
 /**
  * m_input - main entry point to the parser
+ * @line_no - line number
+ * @interactive: interactive mode
  *
  * Return: Malloced pointer to an array of words
  */
-char **m_input(void)
+char **m_input(unsigned long int *line_no, int interactive)
 {
 	char del[] = " \n";
-	char *line = m_parse();
+	char *line = m_parse(interactive);
 
+	(*line_no)++;
 	if (line == NULL)
 	{
 		write(1, "\n", 1);
@@ -93,11 +99,12 @@ char **m_input(void)
 	while (*line == '\n')
 	{
 		free(line);
-		line = m_parse();
+		line = m_parse(interactive);
 
 		if (line == NULL)
 		{
-			write(1, "\n", 1);
+			if (interactive == 1)
+				write(1, "\n", 1);
 			return (NULL);
 		}
 	}

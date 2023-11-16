@@ -1,0 +1,9 @@
+#include "main.h"
+
+int ninter_pipe(unsigned long int line_no)
+{
+	char del[4] = " \n";
+	char *line = m_parse(0);
+	char **commands;
+
+	commands = m_token(line, del);
