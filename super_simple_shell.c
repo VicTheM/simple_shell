@@ -37,7 +37,10 @@ int main(int __attribute__((unused)) argc, char *argv[])
 		free(argvv[0] - 5);
 		free(argvv);
 		if (interactive == 0)
+		{
+			fflush(stderr);
 			break;
+		}
 	}
 
 
