@@ -9,7 +9,7 @@
  *
  * Description: creates a new proc, pauses parent and continues afterwards
  */
-void _execve(const char *pathname, char *const argv[], char *const envp[], char *name)
+void _execve(const char *pathname, char *const argv[], char *const envp[], char *name, paths_t *head)
 {
 	pid_t pid;
 	int status, ret;

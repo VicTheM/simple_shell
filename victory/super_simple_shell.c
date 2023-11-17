@@ -4,8 +4,9 @@
  *
  * Return: Status
  */
-int main(int __attribute__((unused)) argc, char *argv[])
+int main(int __attribute__((unused)) argc, char *argv[], char *env)
 {
+	paths_t *head;
 	int interactive = 0;
 	int i = 1;
 	char *name = argv[0];
@@ -13,9 +14,10 @@ int main(int __attribute__((unused)) argc, char *argv[])
 	char *envp[] = {NULL};
 	unsigned long int line_no = 0;
 
+	build_path(&head);
 
 	if (argv[i] != NULL)
-		_execve(argv[i], argv + 1, envp, name);
+		_execve(argv[i], argv + 1, envp, name, head);
 
 	if (isatty(STDIN_FILENO) == 1)
 		interactive = 1;
@@ -29,9 +31,9 @@ int main(int __attribute__((unused)) argc, char *argv[])
 
 		/* SEARCH FOR CMD AND EXECUTE REPEAT TILL argv[n] == NULL*/
 		if (argvv[0][0] != '~' && argvv[0][0] != '/' && argvv[0][0] != '.')
-			_execve(argvv[0] - 5, argvv, envp, name);
+			_execve(argvv[0] - 5, argvv, envp, name, head);
 		else
-			_execve(argvv[0], argvv, envp, name);
+			_execve(argvv[0], argvv, envp, name, head);
 
 		/* CLEAN UP */
 		free(argvv[0] - 5);
@@ -42,8 +44,6 @@ int main(int __attribute__((unused)) argc, char *argv[])
 			break;
 		}
 	}
-
-
-
+	free_list(head);
 	return (0);
 }
